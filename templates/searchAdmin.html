@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% block title %}Search Admin{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('webmaster_dashboard') }}">
+                            <span data-feather="file"></span>
+                            Dashboard
+                        </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#searchAdmin" data-toggle="tab">
+                            <span data-feather="home"></span>
+                            Search Admin
+                        </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register_admin') }}">
+                            <span data-feather="plus-circle"></span>
+                            Add Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Main content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="pt-3">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <div class="tab-content">
+                <div class="tab-pane active" id="searchUser">
+                    <div class="card">
+                        <div class="card-header bg-success text-white text-center">
+                            <h5>Search Admin</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="searchForm">
+                                {{ csrf_token() }}
+                                <div class="form-group">
+                                    <label for="search_term">Search by Phone Number or Email</label>
+                                    <input type="text" class="form-control" id="search_term" placeholder="Enter Admin Phone Number or Email" required>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-success btn-lg">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="searchResult" style="display:none;">
+                        <div class="card mt-4">
+                            <div class="card-header bg-primary text-white text-center">
+                                <h2>Search Results</h2>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Phone</th>
+                                            <th>Email</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td id="adminId"></td>
+                                            <td id="adminName"></td>
+                                            <td id="adminPhone"></td>
+                                            <td id="adminEmail"></td>
+                                            <td>
+                                                <button id="editBtn" class="btn btn-warning btn-sm">Edit</button>
+                                                <button id="deleteBtn" class="btn btn-danger btn-sm">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="uploadFile">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white text-center">
+                            <h5>Upload File</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="file">Choose file</label>
+                                    <input type="file" class="form-control-file" id="file" name="file" required>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const searchTerm = document.getElementById('search_term').value;
+
+    fetch('{{ url_for("search") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+        },
+        body: JSON.stringify({ search_term: searchTerm })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            document.getElementById('searchResult').style.display = 'block';
+            document.getElementById('adminId').innerText = data.admin.id;
+            document.getElementById('adminName').innerText = data.admin.admin_name;
+            document.getElementById('adminPhone').innerText = data.admin.phone_number;
+            document.getElementById('adminEmail').innerText = data.admin.email;
+
+            document.getElementById('markPresentBtn').onclick = function() {
+                fetch('{{ url_for("mark_present") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                    },
+                    body: JSON.stringify({ admin_id: data.admin.id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('admin marked as present.');
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                });
+            };
+
+            document.getElementById('editBtn').onclick = function() {
+                window.location.href = '{{ url_for("edit_admin", admin_id="") }}' + data.admin.id;
+            };
+
+            document.getElementById('deleteBtn').onclick = function() {
+                fetch('{{ url_for("delete_admin") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                    },
+                    body: JSON.stringify({ admin_id: data.admin.id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('admin deleted successfully.');
+                        document.getElementById('searchResult').style.display = 'none';
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                });
+            };
+        } else {
+            alert(data.message);
+        }
+    });
+});
+</script>
+{% endblock %}
