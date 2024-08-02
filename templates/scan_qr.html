@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Code</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            width: 100px; /* Adjust the size of the logo as needed */
+        }
+        #preview {
+            width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> <!-- Adjust the path as needed -->
+        </header>
+        <h4>Tap to view all invitees</h4>
+        <a href="/invitees">Click</a>
+<body>
+    <h1>Scan QR Code</h1>
+    <video id="video" autoplay></video>
+    <div id="result"></div>
+
+    <!-- Include QR Scanner library -->
+    <script src="https://unpkg.com/qr-scanner/qr-scanner.min.js"></script>
+    
+    <!-- Custom script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const resultElement = document.getElementById('result');
+
+            function handleScan(result) {
+                resultElement.innerHTML = `<strong>Scanned QR Code:</strong> ${result}`;
+                fetch('/confirm_qr_code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ qr_code_data: result })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        resultElement.innerHTML = `<strong>Error:</strong> ${data.error}`;
+                    } else {
+                        resultElement.innerHTML = `<strong>Invitee Confirmed:</strong> ${data.invitee.name} (${data.invitee.phone_number})`;
+                    }
+                })
+                .catch(error => {
+                    resultElement.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                });
+            }
+
+            function handleError(error) {
+                console.error(`QR Code Scan Error: ${error}`);
+            }
+
+            // Create an instance of the QRScanner
+            QrScanner.WORKER_PATH = 'https://unpkg.com/qr-scanner/qr-scanner-worker.min.js';
+            const scanner = new QrScanner(video, handleScan, handleError);
+
+            // Start scanning
+            scanner.start().catch(handleError);
+        });
+    </script>
+</body>
+</html>

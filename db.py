@@ -7,7 +7,7 @@ with app.app_context():
         db.drop_all()
         print("All tables dropped")
 
-        # Create all tables
+        # # Create all tables
         db.create_all()
         print("Database initialized successfully.")
 

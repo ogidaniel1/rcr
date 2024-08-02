@@ -1,118 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}NIGERIAN GRASSROOT LEADERSHIP MERIT AWARD{% endblock %}
+
+{% block content %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Include your meta tags, CSS, and JS as before -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Invitee</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            width: 100px; /* Adjust the size as needed */
+            height: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            margin-bottom: 15px;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    {% extends "base.html" %}
-    {% block title %}Register{% endblock %}
-    {% block content %}
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header header-light-green text-center">
-                        <h2>Register Member</h2>
-                    </div>
-                    <div class="card-body">
-                        <!-- Flash messages -->
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                                <div class="pt-3">
-                                    {% for category, message in messages %}
-                                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                                            {{ message }}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endwith %}
-                        <form method="POST" action="{{ url_for('register') }}">
-                            {{ form.hidden_tag() }}
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                {{ form.email(class="form-control", id="email") }}
-                                {% if form.email.errors %}
-                                    <div class="text-danger">
-                                        {% for error in form.email.errors %}
-                                            <p>{{ error }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <label for="member_name">Name</label>
-                                {{ form.member_name(class="form-control", id="member_name") }}
-                                {% if form.member_name.errors %}
-                                    <div class="text-danger">
-                                        {% for error in form.member_name.errors %}
-                                            <p>{{ error }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <label for="parish">Parish</label>
-                                {{ form.parish(class="form-control", id="parish") }}
-                                {% if form.parish.errors %}
-                                    <div class="text-danger">
-                                        {% for error in form.parish.errors %}
-                                            <p>{{ error }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <label for="area">Area</label>
-                                {{ form.area(class="form-control", id="area") }}
-                                {% if form.area.errors %}
-                                    <div class="text-danger">
-                                        {% for error in form.area.errors %}
-                                            <p>{{ error }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <label for="gender">Gender</label>
-                                {{ form.gender(class="form-control", id="gender") }}
-                                {% if form.gender.errors %}
-                                    <div class="text-danger">
-                                        {% for error in form.gender.errors %}
-                                            <p>{{ error }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <label for="phone_number">Phone Number</label>
-                                {{ form.phone_number(class="form-control", id="phone_number") }}
-                                {% if form.phone_number.errors %}
-                                    <div class="text-danger">
-                                        {% for error in form.phone_number.errors %}
-                                            <p>{{ error }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                           
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Register</button>
-                            </div>
-                        </form>
-                        <div class="text-center mt-3">
-                            <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
-                        </div>
-                    </div>
-                </div>
+    <div class="container">
+        <header>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> <!-- Adjust the path as needed -->
+        </header>
+        <h1>Register Invitee</h1>
+        {% if error %}
+            <div class="error">
+                {{ error }}
             </div>
-        </div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('register') }}">
+            {{ form.hidden_tag() }}
+            <label for="name">{{ form.name.label }}</label>
+            {{ form.name(class="form-control") }}
+            <label for="phone_number">{{ form.phone_number.label }}</label>
+            {{ form.phone_number(class="form-control") }}
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+        <a href="/x.com/danwebit">DanwebIT</a>
     </div>
-    {% endblock %}
-    
-    <!-- Include your scripts at the end -->
 </body>
 </html>
+{%endblock%}
