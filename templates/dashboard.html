@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="navbar navbar-dark bg-dark">
+        <a href="#" class="navbar-brand">Admin Dashboard</a>
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </header>
+    <div class="container mt-4">
+        <h1>Welcome, {{ current_user.username }}</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Add Member</h2>
+                <form action="{{ url_for('add_member') }}" method="post">
+                    <!-- Form fields for adding a member -->
+                    <button type="submit" class="btn btn-primary">Add Member</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <h2>Upload Members</h2>
+                <form action="{{ url_for('upload_members') }}" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" class="form-control">
+                    <button type="submit" class="btn btn-primary mt-2">Upload</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <h2>Actions</h2>
+                <ul>
+                    <li><a href="{{ url_for('mark_attendance') }}">Mark Attendance</a></li>
+                    <li><a href="{{ url_for('edit_member') }}">Edit Member</a></li>
+                    <li><a href="{{ url_for('delete_member') }}">Delete Member</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
