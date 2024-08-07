@@ -1,56 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registered members</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Registered members</h1>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>SN</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>province</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>State</th>
-                    <th>Admin who Registered</th>
-                    <th>Updated by Admin</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for member in members %}
-                <tr>
-                    <td>{{ member.id }}</td>
-                    <td>{{member.member_name}}</td>
-                    <td>{{ member.province }}</td>
-                    <td>{{ member.gender }}</td>
-                    <td>{{ member.phone_number }}</td>
-                    <td>{{ member.email }}</td>
-                    <td>{{ member.state }}</td>
-                    <td>
-                        {% for admin in admins %}
-                            {% if admin.id == member.registered_by_admin_id %}
-                                {{ admin.admin_name }}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for admin in admins %}
-                            {% if admin.id == member.last_edited_by %}
-                                {{ admin.admin_name }}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<h1>Members</h1>
+
+<!-- Add FontAwesome CSS for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Present</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.id }}</td>
+            <td>{{ member.member_name }}</td>
+            <td>{{ member.phone_number }}</td>
+            <td>{{ member.email }}</td>
+            <td>
+                <!-- Check/Uncheck Icon Based on Member Presence -->
+                {% if member.is_present %}
+                    <i class="fas fa-check-circle text-success"></i>
+                {% else %}
+                    <i class="fas fa-times-circle text-danger"></i>
+                {% endif %}
+            </td>
+            <td>
+                <a href="/edit_member/{{ member.id }}" class="btn btn-warning btn-sm">Edit</a>
+                <!-- Delete button with a form to handle POST request -->
+                <form action="/delete_member/{{ member.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this member?');">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

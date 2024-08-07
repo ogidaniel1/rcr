@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="text-center">Edit Member</h1>
-<form method="POST" action="/edit_member/{{ member.id }}">
+<h1 class="text-center">Add Member</h1>
+<form method="POST" action="/add_member">
     {{ form.hidden_tag() }}
     <div class="form-group">
         {{ form.member_name.label(class="form-label") }}
-        {{ form.member_name(class="form-control", value=member.member_name) }}
+        {{ form.member_name(class="form-control") }}
     </div>
     <div class="form-group">
         {{ form.phone_number.label(class="form-label") }}
-        {{ form.phone_number(class="form-control", value=member.phone_number) }}
+        {{ form.phone_number(class="form-control") }}
     </div>
     <div class="form-group">
         {{ form.email.label(class="form-label") }}
-        {{ form.email(class="form-control", value=member.email) }}
+        {{ form.email(class="form-control") }}
     </div>
     <div class="form-group">
         {{ form.area.label(class="form-label") }}
-        {{ form.area(class="form-control", value=member.area) }}
+        {{ form.area(class="form-control") }}
     </div>
     <div class="form-group">
         {{ form.parish.label(class="form-label") }}
-        {{ form.parish(class="form-control", value=member.parish) }}
+        {{ form.parish(class="form-control") }}
     </div>
     <div class="form-group">
         {{ form.gender.label(class="form-label") }}
-        {{ form.gender(class="form-control", value=member.gender) }}
+        {{ form.gender(class="form-control") }}
     </div>
-    <button type="submit" class="btn btn-warning">Update Member</button>
+    <button type="submit" class="btn btn-primary">Add Member</button>
 </form>
 {% endblock %}

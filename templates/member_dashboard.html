@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-center">Member Dashboard</h1>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Add Member</h5>
+                <p class="card-text">Add a new member to the system.</p>
+                <a href="/add_member" class="btn btn-primary">Add Member</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Edit Member</h5>
+                <p class="card-text">Edit existing member details.</p>
+                <a href="/edit_member" class="btn btn-warning">Edit Member</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Search Members</h5>
+                <p class="card-text">Search for members in the system.</p>
+                <form method="POST" action="/search_member">
+                    {{ search_form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ search_form.search_term.label(class="form-label") }}
+                        {{ search_form.search_term(class="form-control") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

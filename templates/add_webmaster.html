@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Register Admin{% endblock %}
+{% block title %}Register Webmaster{% endblock %}
 {% block content %}
 
 <style>
@@ -24,7 +24,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header header-light-green text-center">
-                    <h2>Register Admin</h2>
+                    <h2>Register Webmaster</h2>
                 </div>
                 <div class="card-body">
                     <!-- Flash messages -->
@@ -35,21 +35,21 @@
                                     <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
                                         {{ message }}
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+                                            <span aria-hidden="true">×</span>
                                         </button>
                                     </div>
                                 {% endfor %}
                             </div>
                         {% endif %}
                     {% endwith %}
-                    <form method="POST" action="{{ url_for('register_admin') }}">
+                    <form method="POST" action="{{ url_for('add_webmaster') }}">
                         {{ form.hidden_tag() }}
                         <div class="form-group">
-                            <label for="admin_name">Name</label>
-                            {{ form.admin_name(class="form-control") }}
-                            {% if form.admin_name.errors %}
+                            <label for="webmaster_name">Name</label>
+                            {{ form.webmaster_name(class="form-control") }}
+                            {% if form.webmaster_name.errors %}
                                 <div class="text-danger">
-                                    {% for error in form.admin_name.errors %}
+                                    {% for error in form.webmaster_name.errors %}
                                         <p>{{ error }}</p>
                                     {% endfor %}
                                 </div>
@@ -99,16 +99,12 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="text-center">
-                            {{ form.submit(class="btn btn-custom-green") }}
-                        </div>
+                        <button type="submit" class="btn btn-custom-green btn-block">Register</button>
                     </form>
-                    <div class="text-center mt-3">
-                        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

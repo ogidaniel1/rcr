@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Add Admin Form -->
+<div class="mt-5">
+    <h4>Add New Admin</h4>
+    <form method="POST" action="{{ url_for('add_admin') }}">
+        {{ admin_form.hidden_tag() }}
+        <div class="form-group">
+            {{ admin_form.admin_name.label(class="form-label") }}
+            {{ admin_form.admin_name(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ admin_form.phone_number.label(class="form-label") }}
+            {{ admin_form.phone_number(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ admin_form.email.label(class="form-label") }}
+            {{ admin_form.email(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ admin_form.password.label(class="form-label") }}
+            {{ admin_form.password(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ admin_form.confirm_password.label(class="form-label") }}
+            {{ admin_form.confirm_password(class="form-control") }}
+        </div>
+        
+        
+        <button type="submit" class="btn btn-primary">Add Admin</button>
+    </form>
+</div>
+{% endblock %}

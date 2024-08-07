@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchAttendanceRecords();
+        });
+
+        function fetchAttendanceRecords() {
+            fetch('/attendance_records', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => displayAttendanceRecords(data))
+              .catch(error => console.error('Error:', error));
+        }
+
+        function displayAttendanceRecords(records) {
+            const tableBody = document.getElementById('attendanceTableBody');
+            tableBody.innerHTML = '';
+
+            records.forEach(record => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${record.id}</td>
+                    <td>${record.member_id}</td>
+                    <td>${new Date(record.timestamp).toLocaleString()}</td>
+                    <td>${record.marked_by_id}</td>
+                    <td>${record.marked_by_name}</td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Attendance Records</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Member ID</th>
+                    <th>Timestamp</th>
+                    <th>Marked By ID</th>
+                    <th>Marked By Name</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceTableBody">
+                <!-- Attendance records will be injected here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

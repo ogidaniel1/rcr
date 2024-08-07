@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Webmasters</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for webmaster in webmasters %}
+        <tr>
+            <td>{{ webmaster.id }}</td>
+            <td>{{ webmaster.name }}</td>
+            <td>{{ webmaster.email }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
